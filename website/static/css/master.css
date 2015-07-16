@@ -1,0 +1,111 @@
+body { padding-top: 50px; }
+
+.btn-custom {
+  background-color: hsl(0, 100%, 22%) !important;
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#d60000", endColorstr="#700000");
+  background-image: -khtml-gradient(linear, left top, left bottom, from(#d60000), to(#700000));
+  background-image: -moz-linear-gradient(top, #d60000, #700000);
+  background-image: -ms-linear-gradient(top, #d60000, #700000);
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #d60000), color-stop(100%, #700000));
+  background-image: -webkit-linear-gradient(top, #d60000, #700000);
+  background-image: -o-linear-gradient(top, #d60000, #700000);
+  background-image: linear-gradient(#d60000, #700000);
+  border-color: #700000 #700000 hsl(0, 100%, 17%);
+  color: #fff !important;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.33);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background: #eee !important;  
+}
+
+.wrapper {  
+  margin-top: 80px;
+  margin-bottom: 80px;
+}
+
+.centered-cell {
+  text-align: center;
+  vertical-align:middle !important;
+}
+.form-signin {
+  max-width: 380px;
+  padding: 15px 35px 45px;
+  margin: 0 auto;
+  background-color: #fff;
+  border: 1px solid rgba(0,0,0,0.1);  
+
+  .form-signin-heading,
+  .checkbox {
+    margin-bottom: 30px;
+  }
+
+  .checkbox {
+    font-weight: normal;
+  }
+
+  .form-control {
+    position: relative;
+    font-size: 16px;
+    height: auto;
+    padding: 10px;
+    @include box-sizing(border-box);
+
+    &:focus {
+      z-index: 2;
+    }
+  }
+
+  input[type="text"] {
+    margin-bottom: -1px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  input[type="password"] {
+    margin-bottom: 20px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+}
+
+.nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus {
+color: #fff;
+background-color: #777;
+}
+
+.nav-pills>li.active>a, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus {
+color: #fff;
+background-color: #777;
+}
+
+.nav-pills>li>a{
+  color: #777;
+}
+
+.nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus {
+color: #fff;
+background-color: #777;
+}
+
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus {
+color: #fff;
+background-color: #777;
+}
+
+.nav-tabs>li>a{
+  color: #777;
+}
+
+.tab-pane:after {
+    content: '';
+    clear: both;
+    display: table;
+}
+
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+  background-color: #EEF3E2;
+
+}

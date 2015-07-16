@@ -1,0 +1,146 @@
+{% extends "website/base.html" %}
+{% load bootstrap3 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+
+
+{% load carton_tags %}
+{% load custom_filters %}
+
+
+{% block content %}
+
+
+
+
+
+<div align="center">
+
+<br/>
+
+<div id="filterClass" class="form-inline">
+<div style="width: 800px;">
+
+{% bootstrap_messages %}
+
+</div>
+    <div class="input-group" style="width: auto !important; font-size: 0.85em;"> <span class="input-group-addon">Filter</span>
+        <input id="filter" type="text" class="form-control" placeholder="Search for Game..." style="width: auto !important;" >
+    </div>
+
+	<label for="name" style="width: auto !important; font-size: 0.85em;">Platform</label>
+	<select id="platformFilter" class="form-control" style="width: auto !important; font-size: 0.85em;">
+		<option value="">All</option>
+		{% for platform in platforms %}
+			<option value={{ platform.name }}>{{ platform.name }}</option>
+		{% endfor %}
+	</select>
+
+	<label for="name" style="width: auto !important; font-size: 0.85em;">Region</label>
+	<select id="regionFilter" class="form-control" style="width: auto !important; font-size: 0.85em;">
+		<option value="">All</option>
+		{% for region in regions %}
+			<option value={{ region.name }}>{{ region.name }}</option>
+		{% endfor %}
+	</select>
+
+	<label for="name" style="width: auto !important; font-size: 0.85em;">Language</label>
+	<select id="languageFilter" class="form-control" style="width: auto !important; font-size: 0.85em;">
+		<option value="">All</option>
+		{% for language in languages %}
+			<option value={{ language.name }}>{{ language.name }}</option>
+		{% endfor %}
+	</select>
+
+	<label for="name" style="width: auto !important; font-size: 0.85em;">Availability</label>
+	<select id="availabilityFilter" class="form-control" style="width: auto !important; font-size: 0.85em;">
+		<option value="">All</option>
+		{% for availability in availabilities %}
+            {%if "Request" in availability.name %}
+			    <option value="Request">{{ availability.name }}</option>
+            {% elif "Stock" in availability.name %}
+                <option value="Stock">{{ availability.name }}</option>
+            {% else %}
+                <option value={{ availability.name }}>{{ availability.name }}</option>
+            {% endif %}
+		{% endfor %}
+	</select>
+<button class="btn btn-default active" onClick="resetAllValues();"><span class="glyphicon glyphicon-remove"></span> Reset</button>
+</div>
+<br/>
+
+<br/>
+<table class="table table-condensed table-striped table-bordered table-hover" style="width: auto !important; font-size: 0.85em;">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Platform</th>
+            <th>Region</th>
+            <th>Language</th>
+            <th>Availability</th>
+            <th>Price 1+</th>
+            <th>Price 10+</th>
+            <th>Price 20+</th>
+            <th>Price 50+</th>
+            <th>In Stock</th>
+            <th>Add to Cart</th>
+        </tr>
+    </thead>
+
+    {% if products_featured|length > 0 %}
+    <tbody class="searchable">
+
+	{% for product_featured in products_featured %}
+    	<tr>
+	    	<td style="background-color: #EEF3E2;"><strong>{{ product_featured.product.name }}</strong></td>
+			<td style="background-color: #EEF3E2;">{{ product_featured.product.platform.name}}</td>
+			<td style="background-color: #EEF3E2;">{{ product_featured.product.region.name }}</td>
+			<td style="background-color: #EEF3E2;">{{ product_featured.product.language.name }}</td>
+			<td style="background-color: #EEF3E2;">{{ product_featured.product.availability.name }}</td>
+            <td style="background-color: #EEF3E2;">{{ product_featured.product.price.price_1|get_price_with_currency_symbol }}</td>
+            <td style="background-color: #EEF3E2;">{{ product_featured.product.price.price_2|get_price_with_currency_symbol }}</td>
+            <td style="background-color: #EEF3E2;">{{ product_featured.product.price.price_3|get_price_with_currency_symbol }}</td>
+            <td style="background-color: #EEF3E2;">{{ product_featured.product.price.price_4|get_price_with_currency_symbol }}</td>
+            <td style="background-color: #EEF3E2;">{% if product_featured.product.availability.name == 'Pre-Order' %}
+				-
+            {% else %} {{ product_featured.product.available_stock}} {% endif %}</td>
+            <td style="background-color: #EEF3E2;">
+            <input type="text" class="input-small" style="width:50px; text-align: center;" value="{{ cart_contents_qty|get_item:product_featured.product.id }}" id="amount-input-{{product_featured.product.id}}">
+			</td>
+		</tr>
+	{% endfor %}
+	<tr style="padding-bottom: 10em;">
+		<td style="border:none;"></td>
+		<td style="border:none;"></td>
+	</tr>
+    </tbody>
+{% endif %}
+    <tbody class="searchable">
+	{% for product in products %}
+    	<tr>
+	    	<td>{{ product.name }}{%if product.availability.name == 'Pre-Order' and product.releaseDate|get_preorder_release_date != None %} <span class="badge alert-info">{{ product.releaseDate|get_preorder_release_date }}</span>{% endif %}</td>
+			<td>{{ product.platform }}</td>
+			<td>{{ product.region }}</td>
+			<td>{{ product.language }}</td>
+			<td>{{ product.availability }}</td>
+            <td>{{ product.price.price_1|get_price_with_currency_symbol }}</td>
+            <td>{{ product.price.price_2|get_price_with_currency_symbol }}</td>
+            <td>{{ product.price.price_3|get_price_with_currency_symbol }}</td>
+            <td>{{ product.price.price_4|get_price_with_currency_symbol }}</td>
+            <td>{% if product.availability.name == 'Pre-Order' %}
+				-
+            {% else %} {{ product.available_stock}} {% endif %}</td>
+            <td>
+            <input type="text" class="input-small" style="width:50px; text-align: center;" value="{{ cart_contents_qty|get_item:product.id }}" id="amount-input-{{product.id}}">
+			</td>
+		</tr>
+	{% endfor %}
+    </tbody>
+</table>
+</div></div>
+
+{% endblock content %}

@@ -1,0 +1,129 @@
+{% extends "website/base.html" %}
+{# Load the tag library #}
+
+{% load bootstrap3 %}
+
+{# Load CSS and JavaScript #}
+
+
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+
+{% load custom_filters %}
+{% load mathfilters %}
+
+{% block content %}
+
+<p>
+<div class="col-xs-3"></div>
+<div class="center-block col-xs-6">
+{% bootstrap_messages %}
+
+	<div class="tabbable" >
+		<ul class="nav black nav-tabs">
+			<li class="active"><a href="#profile" data-toggle="tab"><span class="glyphicon glyphicon-user"></span> Profile</a></li>
+			<li><a href="#orders" data-toggle="tab"><span class="glyphicon glyphicon-tasks"></span> Orders</a></li>
+			<li><a href="#transactions" data-toggle="tab"><span class="glyphicon glyphicon-usd"></span> Transactions</a></li>
+			<li><a href="#messages" data-toggle="tab"><span class="glyphicon glyphicon-envelope"></span> Messages</a></li>
+
+		</ul>
+	</div>
+
+	<br/> 
+	<div class="tab-content">
+		<div id="profile" class="tab-pane active fade in">
+			
+			<form action="/account/" method="post" class="form">
+				{% csrf_token %}
+
+
+				{% bootstrap_form form %}
+
+				{% buttons %}
+				<button type="submit" class="btn btn-success">
+					{% bootstrap_icon "ok" %} Save
+				</button>
+				{% endbuttons %}
+
+			</form>
+		</div>
+	<div id="orders" class="tab-pane fade pane2">
+	{% if orders|length > 0 %}
+	    <div class="input-group" style="width: auto !important; "> <span class="input-group-addon">Filter</span>
+        <input id="filterGameProduct" type="text" class="form-control" placeholder="Search for Game..." style="width: auto !important;" >
+    </div>
+    <br/>
+	<table class="table table-condensed table-striped table-bordered table-hover" style="font-size: 0.85em;">
+    <thead>
+        <tr>
+            <th class="centered-cell">Order</th>
+            <th class="centered-cell">Amount</th>
+            <th class="centered-cell">Units</th>
+            <th class="centered-cell">Product</th>
+			<th class="centered-cell">Status</th>
+			<th class="centered-cell">Date</th>
+			<th class="centered-cell">Download</th>
+        </tr>
+    </thead>
+    	
+    <tbody class="searchable">
+    	{% for order in orders %}
+	    	{% for order_product in order|get_products_on_order %}
+			<tr>
+				<td class="centered-cell">{{ order.randomId }}</td>
+				<td class="centered-cell">{{ order_product.price|mul:order_product.quantity|get_price_with_currency_symbol }} {% if order_product.quantity > 0 %} <h6 style="font-size: 80%;">({{order_product.price|get_price_with_currency_symbol }}/unit)</h6>{% endif %}</td>
+				<td class="centered-cell">{{ order_product.quantity }}</td>
+				<td style="vertical-align:middle;">{{ order_product.product.name }} </td>
+				<td class="centered-cell">{{ order_product.status }}</td>
+				<td class="centered-cell">{{ order.created_at }}</td>
+				<td class="centered-cell">{% if order_product.status.name != "Pre-Order" %}<span class="viewOrderDetails" id="{{ order.randomId }}"data-toggle="modal" data-target="#myModal"><strong><a href="/download/?order={{ order.randomId }}&product={{ order_product.product.pk }}">Download</a></strong></span>{% else %}-{% endif %}</td>
+			</tr>
+			{% endfor %}
+		{% endfor %}
+
+	</tbody>
+	</table>
+		{% else %}
+			<span class="col-xs-12">You don't have any orders</span>
+		{% endif %}
+	</div>
+	<div id="transactions" class="tab-pane fade">
+	{% if transactions|length > 0 %}
+		<table class="table table-condensed table-striped table-bordered table-hover" style="font-size: 0.85em;">
+    <thead>
+        <tr>
+            <th>Transaction ID</th>
+            <th>Order ID</th>
+            <th>Amount</th>
+            <th>Running Balance</th>
+			<th>Type</th>
+			<th>Date</th>
+        </tr>
+    </thead>
+    <tbody class="searchable">
+    	
+		{% for transaction in transactions %}
+		<tr>
+			<td>{{ transaction.transactionID }}</td>
+			<td>{{ transaction.order.randomId }}</td>			
+			<td>{{ transaction.amount|get_price_with_currency_symbol }}</td>
+			<td>{{ transaction.runningBalance }}</td>
+			<td>{{ transaction.paymentType }}</td>		
+			<td>{{ transaction.created_at }}</td>			
+		</tr>
+		{% endfor %}
+
+	</tbody>
+	</table>
+		{% else %}
+			<span class="col-xs-12">You don't have any transactions</span>
+		{% endif %}
+	</div>
+	<div id="messages" class="tab-pane fade">
+	<span class="col-xs-12">You don't have any messages</span>
+	</div>
+</div>
+</div>
+<div class="col-xs-3"></div>
+</p>
+{% endblock content %}

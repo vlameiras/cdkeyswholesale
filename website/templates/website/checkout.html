@@ -1,0 +1,62 @@
+{% extends "website/base.html" %}
+{% load bootstrap3 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery=True %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+
+
+{% load carton_tags %}
+{% load custom_filters %}
+{% load mathfilters %}
+
+{% block content %}
+
+<br/>
+<div class="container">
+
+
+<div class="col-xs-2"></div>
+<div class="col-xs-8">
+{% bootstrap_messages %}
+<table class="table table-condensed table-striped table-bordered" >
+    <thead>
+        <tr>
+            <th class="col-md-2">Quantity</th>
+            <th class="col-md-6">Product</th>
+            <th class="col-md-2">Unit Price</th>
+            <th class="col-md-2">Sub-Total</th>
+        </tr>
+    </thead>
+    <tbody class="searchable">
+	{% for item in cart.items %}
+    	<tr>
+	    	<td>{{ item.quantity }}x</td>
+			<td>{{ item.product.name }}</td>
+			<td>{{ item.price|mul:customer.defaultCurrency.exchangeRate|floatformat:2 }} {{ customer.defaultCurrency.shortName }}</td>
+			<td>{{ item.subtotal|mul:customer.defaultCurrency.exchangeRate|floatformat:2 }} {{ customer.defaultCurrency.shortName }}</td>
+		</tr>
+	{% endfor %}
+    </tbody>
+</table>
+
+<div class="pull-right" style=" font-size: 1.3em;">
+<strong>Total:</strong> {{ cart.total|mul:customer.defaultCurrency.exchangeRate|floatformat:2 }} {{ customer.defaultCurrency.shortName }}<br/><br/>
+ <form action="/checkout/" method="post" class="form">
+				{% csrf_token %}
+
+				{% buttons %}
+				<button type="submit" name="submit_btn" value="1" class="btn-lg btn-success">
+					{% bootstrap_icon "ok" %} Order
+				</button>
+				{% endbuttons %}
+
+			</form>
+</div>
+
+</div>
+<div class="col-xs-2"></div>
+</div>
+{% endblock content %}

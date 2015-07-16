@@ -1,0 +1,82 @@
+
+{% load bootstrap3 %}
+{% load jfutags %}
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery=True %}
+<script type="text/javascript" src="{{ STATIC_URL }}js/filters.js"></script>
+<br/>
+
+<div class="col-xs-3">
+
+</div>
+
+<div id="filterClass" class="col-xs-6">
+
+<div class="form-group">
+    <label for="name" style="width: auto !important;">Game</label>
+	<select id="productsList" name="productsList" class="form-control" style="width: auto !important;">
+				 
+	    {% for product in products %}
+	            <option value="{{product.id}}">{{product.name}}</option>
+	    {% endfor %}
+	</select>
+  <input type="hidden" name="productSelected" id="productSelected" value="0">
+  </div>
+  <div class="form-group">
+   <label for="name" style="width: auto !important;">Supplier</label>
+<select id="suppliersList" name="suppliersList" class="form-control" style="width: auto !important;">
+			<option value=""></option>
+    {% for supplier in suppliers %}
+            <option value="{{supplier.id}}">{{supplier.name}}</option>
+    {% endfor %}
+</select>
+  </div>
+  <div class="form-group">
+    <label for="bundle" style="width: auto !important; ">Bundle (Optional)</label>
+    <input type="text" name="bundle" class="form-control" id="bundle" style="width: auto !important;" placeholder="0" value="0">
+  </div>
+<div class="form-group">
+  <label for="price" style="width: auto !important; ">Supplier price</label>
+  <div class="input-group">
+	  <span class="input-group-addon">€</span>
+	  <input type="number" id="price" name="price" step="0.01"  class="form-control" placeholder="0.00" style="width: auto !important;" >
+  </div>
+</div>
+<div class="form-group">
+  <label for="customerPrice" style="width: auto !important; ">Sale price</label>
+  <div class="input-group">
+    <span class="input-group-addon">1+ €</span>
+    <input type="number" id="customerPrice1" name="customerPrice1" step="0.01"  class="form-control" placeholder="0.00" style="width: auto !important;" >
+  </div><br/>
+   <div class="input-group">
+    <span class="input-group-addon">10+ €</span>
+    <input type="number" id="customerPrice2" name="customerPrice2" step="0.01"  class="form-control" placeholder="0.00" style="width: auto !important;" >
+  </div><br/>
+   <div class="input-group">
+    <span class="input-group-addon">20+ €</span>
+    <input type="number" id="customerPrice3" name="customerPrice3" step="0.01"  class="form-control" placeholder="0.00" style="width: auto !important;" >
+  </div><br/>
+   <div class="input-group">
+    <span class="input-group-addon">50+ €</span>
+    <input type="number" id="customerPrice4" name="customerPrice4" step="0.01"  class="form-control" placeholder="0.00" style="width: auto !important;" >
+  </div>
+</div>
+
+  <div class="form-group">
+    <input type="hidden" id="margin" name="margin"><label> Auto-Margin</label>
+  </div>
+
+  <div>
+	
+	{% jfu %}
+</div>
+</div>
+
+
+
+
+<div class="col-xs-3">
+
+</div>
+
